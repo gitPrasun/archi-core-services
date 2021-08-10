@@ -1,0 +1,168 @@
+type Model{
+	id:ID!
+	domain: [Element]
+	capabilities: [Element]
+	services: [Element]
+	properties: [Property]
+	metaProperties: [MetaProperty]
+	version:Int
+	name:String
+	note:String
+	purpose:String
+}
+
+type ModelRole{
+     model:Model
+     roles:[Role]
+}
+
+input ModelInput{
+	name:String
+	note:String
+	purpose:String
+	metaProperties: [MetaPropertyInput]
+	properties:[PropertyInput]
+	domain:[ElementInput]
+	capabilities:[ElementInput]
+	createdBy:String
+}
+
+type Element{
+	id:ID!
+	name:String
+	description:String
+	properties: [Property]
+
+}
+
+input ElementInput{
+	name:String
+	description:String
+	properties: [PropertyInput]!
+	parentId:String
+}
+
+input ServicesInput{
+	parentCapabilityId:String!
+	name:String
+	description:String
+	properties: [PropertyInput]!
+}
+
+
+type MetaProperty{
+	  id:ID
+	  modelRefId:String
+	  baseType:String
+	  enterpriseEntity:String
+	  name:String
+	  context:String
+	  restrictedValues: [String]
+	  cardinality:String
+	  optionality:String
+	  defaultValue:String
+	  min:String
+	  max:String
+}
+
+input MetaPropertyInput{
+	  baseType:String
+	  enterpriseEntity:String
+	  name:String
+	  context:String
+	  restrictedValues: [String]
+	  cardinality:String
+	  optionality:String
+	  defaultValue:String
+	  min:String
+	  max:String
+}
+type Property{
+	  name: String 
+	  value: String
+	  parentId: String
+}
+
+input PropertyInput{
+	  name: String 
+	  value: String
+}
+
+type User{
+	  id:ID!
+	  name:String
+	  email:String
+	  org: String
+	  subOrg:String
+	  username:String
+	  password:String
+}
+
+input UserInput{
+	  name:String
+	  email:String
+	  org: String
+	  subOrg:String
+	  username:String
+	  password:String
+}
+
+type Role{
+	 id:ID
+	 userId:String
+	 modelId:String
+	 capabilityAccess:String
+	 serviceAccess:String
+}
+
+input RoleInput{
+	 id:ID
+	 userId:String
+	 capabilityAccess:String
+	 serviceAccess:String
+	 modelId:String
+}
+
+
+
+input CredentialsInput {
+    username: String!
+    password: String!
+}
+
+type Query{
+	 status: String!
+	 login(credentials: CredentialsInput!): String
+	 userModels(userId: ID):[Model]!
+	 allowedDomains(modelId: ID): [Element]
+	 
+	 allowedCapabilities(modelId: ID): [Element]
+	 allowedServices(modelId: ID): [Element]
+	 
+	 capabilitiesWhere(modelId:ID, properties: [PropertyInput]):[Element]
+	 servicesWhere(modelId:ID, properties: [PropertyInput]):[Element]
+	 
+	 metaPropertiesWhere(modelId:ID , elementTypes:[String]): [MetaProperty]
+	 
+}
+
+type Mutation{	 
+	 createUsers(users:[UserInput]):User
+	 createModelWith(createdBy: ID, modelData:ModelInput):Model
+	 updateModelWith(modelId: ID, updatedBy:ID, roles:[RoleInput], metaProperties:[MetaPropertyInput]):Model
+	 
+	 updateServicesWith(modelId: ID, updatedBy:ID , changeServices: [ServicesInput]!): [Element]!
+	 createServices(modelId: ID, createdBy:ID , services: [ServicesInput]!): [Element]!
+	 
+	 createCapabilities(modelId: ID, createdBy:ID , capabilities: [ElementInput]!): [Element]!
+	 updateCapabilityWith(modelId: ID, updatedBy:ID , changeCapabilities: [ElementInput]!):[Element]!
+	 
+}
+
+
+
+
+
+
+
+
