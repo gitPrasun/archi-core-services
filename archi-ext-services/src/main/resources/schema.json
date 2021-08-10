@@ -1,0 +1,15 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Domain",
+    "description": "A domain",
+    
+
+	"Entities":{
+		"ArchiEntity":"string",
+		"ArchiProperties":{
+			"name":"string","type":"string","validEnum":"list"
+			},
+		"required":["name"]
+	}
+
+}
